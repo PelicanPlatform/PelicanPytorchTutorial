@@ -15,9 +15,10 @@ Related tools:
 [Fashion-mnist](https://www.kaggle.com/datasets/zalando-research/fashionmnist)
 
 [ImageNet](https://www.kaggle.com/c/imagenet-object-localization-challenge/overview/description)
+
 [ImageNet Mini](https://github.com/fastai/imagenette)
 
-## Current data under chic/PUBLIC/hzhao292 name space
+## Current data under `chtc/PUBLIC/hzhao292` name space
 
 | Size | File Name                                  |
 | ---- | ------------------------------------------ |
