@@ -29,3 +29,33 @@ Epoch 9/10, Validation Loss: 0.3713, Accuracy: 0.8897, Time Taken: 1142.84 secon
 
 Epoch 10/10, Training Loss: 0.4883
 Epoch 10/10, Validation Loss: 0.3427, Accuracy: 0.8917, Time Taken: 1141.83 seconds
+
+
+
+
+7/16/2024, 3 epochs using ImageNetMini: 
+Read data remotely from Pelican
+len(images):  9469
+len(images):  3925
+Data preparing time: 0.823365.
+Training started.
+Epoch 1/3, Training Loss: 1.1869
+Epoch 1/3, Validation Loss: 0.62, Accuracy: 0.82, Time Taken: 221.96 seconds
+Epoch 2/3, Training Loss: 0.4403
+Epoch 2/3, Validation Loss: 0.32, Accuracy: 0.90, Time Taken: 90.74 seconds
+Epoch 3/3, Training Loss: 0.3661
+Epoch 3/3, Validation Loss: 0.29, Accuracy: 0.91, Time Taken: 88.78 seconds
+Training completed.
+
+Read data remotely from Pelican with local Cache
+len(images):  9469
+len(images):  3925
+Data preparing time: 0.765825.
+Training started.
+Epoch 1/3, Training Loss: 1.2094
+Epoch 1/3, Validation Loss: 0.46, Accuracy: 0.86, Time Taken: 824.57 seconds
+Epoch 2/3, Training Loss: 0.4545
+Epoch 2/3, Validation Loss: 0.34, Accuracy: 0.89, Time Taken: 57.77 seconds
+Epoch 3/3, Training Loss: 0.3889
+Epoch 3/3, Validation Loss: 0.38, Accuracy: 0.88, Time Taken: 53.99 seconds
+Training completed.
