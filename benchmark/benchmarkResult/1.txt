@@ -1,0 +1,66 @@
+$ python [bm5.py](http://bm5.py/) -a vgg16 -e 5
+
+Read Locally.
+Data preparing time: 0.033249.
+Training started.
+Epoch 1/5, Training Loss: 4.0925
+Epoch 1/5, Validation Loss: 2.08, Accuracy: 0.24, Time Taken: 67.61 seconds
+Epoch 2/5, Training Loss: 2.0454
+Epoch 2/5, Validation Loss: 2.03, Accuracy: 0.30, Time Taken: 67.07 seconds
+Epoch 3/5, Training Loss: 1.8664
+Epoch 3/5, Validation Loss: 1.87, Accuracy: 0.32, Time Taken: 67.59 seconds
+Epoch 4/5, Training Loss: 1.7415
+Epoch 4/5, Validation Loss: 1.49, Accuracy: 0.47, Time Taken: 67.65 seconds
+Epoch 5/5, Training Loss: 1.6567
+Epoch 5/5, Validation Loss: 1.37, Accuracy: 0.53, Time Taken: 67.58 seconds
+Training completed.
+
+Read data remotely from Pelican with local Cache
+Data preparing time: 0.896136.
+Training started.
+Epoch 1/5, Training Loss: 5.4555
+Epoch 1/5, Validation Loss: 2.22, Accuracy: 0.18, Time Taken: 836.15 seconds
+Epoch 2/5, Training Loss: 2.1698
+Epoch 2/5, Validation Loss: 1.93, Accuracy: 0.30, Time Taken: 70.08 seconds
+Epoch 3/5, Training Loss: 1.9599
+Epoch 3/5, Validation Loss: 1.85, Accuracy: 0.34, Time Taken: 67.98 seconds
+Epoch 4/5, Training Loss: 1.8552
+Epoch 4/5, Validation Loss: 1.67, Accuracy: 0.39, Time Taken: 67.25 seconds
+Epoch 5/5, Training Loss: 1.7362
+Epoch 5/5, Validation Loss: 1.53, Accuracy: 0.45, Time Taken: 67.81 seconds
+Training completed.
+
+Read data remotely from Pelican
+Data preparing time: 0.801379.
+Training started.
+Epoch 1/5, Training Loss: 5.5040
+Epoch 1/5, Validation Loss: 2.24, Accuracy: 0.16, Time Taken: 97.78 seconds
+Epoch 2/5, Training Loss: 2.1630
+Epoch 2/5, Validation Loss: 2.06, Accuracy: 0.24, Time Taken: 98.61 seconds
+Epoch 3/5, Training Loss: 2.0057
+Epoch 3/5, Validation Loss: 1.97, Accuracy: 0.28, Time Taken: 97.62 seconds
+Epoch 4/5, Training Loss: 1.8554
+Epoch 4/5, Validation Loss: 1.79, Accuracy: 0.35, Time Taken: 95.18 seconds
+Epoch 5/5, Training Loss: 1.7334
+Epoch 5/5, Validation Loss: 1.47, Accuracy: 0.47, Time Taken: 95.69 seconds
+Training completed.
+
+
+Downloading zip file from pelican first, extract and train on it.
+Downloading ImageNetMini.zip
+  - Time used: 12.654394.
+Extracting ImageNetMini.zip
+  - Time used: 17.700429.
+Data preparing time: 0.035357.
+Training started.
+Epoch 1/5, Training Loss: 5.2365
+Epoch 1/5, Validation Loss: 2.18, Accuracy: 0.18, Time Taken: 68.52 seconds
+Epoch 2/5, Training Loss: 2.1231
+Epoch 2/5, Validation Loss: 2.18, Accuracy: 0.21, Time Taken: 66.87 seconds
+Epoch 3/5, Training Loss: 1.9564
+Epoch 3/5, Validation Loss: 1.80, Accuracy: 0.34, Time Taken: 67.37 seconds
+Epoch 4/5, Training Loss: 1.7865
+Epoch 4/5, Validation Loss: 1.54, Accuracy: 0.43, Time Taken: 66.99 seconds
+Epoch 5/5, Training Loss: 1.6810
+Epoch 5/5, Validation Loss: 1.55, Accuracy: 0.42, Time Taken: 67.10 seconds
+Training completed.

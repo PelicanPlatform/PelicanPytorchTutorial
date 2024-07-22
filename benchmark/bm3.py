@@ -20,6 +20,8 @@ from fsspec.implementations.cached import WholeFileCacheFileSystem
 
 from PIL import Image
 import warnings
+import zipfile
+
 warnings.filterwarnings("ignore")
 mp.set_start_method('spawn', force=True)
 
@@ -70,7 +72,6 @@ class RemoteImageFolder(VisionDataset):
             self._init_remote(root)
 
     def _init_local(self, root):
-        print(f"Initializing local dataset from {root}")
         self.root = root
         self.classes = sorted(os.listdir(root))
         self.class_to_idx = {cls: i for i, cls in enumerate(self.classes)}
@@ -80,7 +81,7 @@ class RemoteImageFolder(VisionDataset):
         self.root = root
         self.classes = sorted([item['name'] for item in self.fs.ls(root)])
         self.class_to_idx = {cls: i for i, cls in enumerate(self.classes)}
-        
+
         self.imgs = self._make_dataset_remote()
 
     def _make_dataset_local(self):
@@ -90,8 +91,7 @@ class RemoteImageFolder(VisionDataset):
             if not os.path.isdir(class_path):
                 continue
             for img_name in os.listdir(class_path):
-                img_name = img_name.lower()
-                if img_name.endswith('.jpg') or img_name.endswith('.jpeg') or img_name.endswith('.png'):
+                if img_name.lower().endswith('.jpg') or img_name.lower().endswith('.jpeg') or img_name.lower().endswith('.png'):
                     img_path = os.path.join(class_path, img_name)
                     images.append((img_path, class_idx))
         return images
@@ -105,25 +105,23 @@ class RemoteImageFolder(VisionDataset):
                 img_path = item['name']
                 if img_path.lower().endswith('.jpg') or img_path.lower().endswith('.jpeg') or img_path.lower().endswith('.png'):
                     images.append((img_path, class_idx))
-        print("len(images): ", len(images))
         return images
 
     def __getitem__(self, index):
         img_path, target = self.imgs[index]
-        if isinstance(self.fs, PelicanFileSystem) or isinstance(self.fs, WholeFileCacheFileSystem): 
+        if isinstance(self.fs, PelicanFileSystem) or isinstance(self.fs, WholeFileCacheFileSystem):
             with self.fs.open(img_path, 'rb') as f:
                 img = Image.open(f).convert('RGB')
         else:
-            print("img_path: ", img_path)
             img = read_image(img_path)
             img = transforms.ToPILImage()(img)
-        
+
         if img.mode != 'RGB':
             img = img.convert('RGB')
-        
+
         if self.transform:
             img = self.transform(img)
-            
+
         return img, target
 
     def __len__(self):
@@ -131,10 +129,9 @@ class RemoteImageFolder(VisionDataset):
 
 
 
-def training(train_dataset, train_loader, val_loader):
+def training(train_loader, val_loader):
     args = parser.parse_args()
 
-    # Initialize the model, loss function, and optimizer
     if args.arch == 'resnet50':
         model = models.resnet50(pretrained=True)
     elif args.arch=='vgg16':
@@ -189,25 +186,6 @@ def training(train_dataset, train_loader, val_loader):
     print("Training completed.")
 
 
-def check_files_in_folder(folder_path):
-    try:
-        # List all files in the folder
-        files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-
-        # Check if there are any files
-        if not files:
-            print("No files found in the folder.")
-            return
-
-        # Print the sizes of the files
-        for file in files:
-            file_path = os.path.join(folder_path, file)
-            file_size = os.path.getsize(file_path)
-            print(f"File: {file}, Size: {file_size} bytes")
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
 def train_locally():
     args = parser.parse_args()
     print()
@@ -224,7 +202,7 @@ def train_locally():
 
     end_time = time.time()
     print(f"Data preparing time: {end_time-start_time:4f}.")
-    training(train_dataset, train_loader, val_loader)
+    training(train_loader, val_loader)
 
 
 def train_remote():
@@ -234,7 +212,7 @@ def train_remote():
     args = parser.parse_args()
 
     start_time = time.time()
-    
+
     fs = PelicanFileSystem("pelican://osg-htc.org")
 
     # Load the datasets
@@ -248,7 +226,7 @@ def train_remote():
     end_time = time.time()
     print(f"Data preparing time: {end_time-start_time:4f}.")
 
-    training(train_dataset, train_loader, val_loader)
+    training(train_loader, val_loader)
 
 
 def train_remote_localcache():
@@ -269,12 +247,45 @@ def train_remote_localcache():
     end_time = time.time()
     print(f"Data preparing time: {end_time-start_time:4f}.")
 
-    training(train_dataset, train_loader, val_loader)
+    training(train_loader, val_loader)
 
 
+def train_zip():
+    args = parser.parse_args()
+    print()
+    print("Downloading zip file from pelican first, extract and train on it.")
+    time1 = time.time()
+    print("Downloading ImageNetMini.zip")
+    fs = PelicanFileSystem("pelican://osg-htc.org")
+    fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
+    time2 = time.time()
+    print(f"  - Time used: {time2-time1:2f}.",)
+
+    
+    print("Extracting ImageNetMini.zip")
+    file = zipfile.ZipFile('ImageNetMini.zip')
+    file.extractall('./data')
+    time3 = time.time()
+    print(f"  - Time used: {time3-time2:2f}.",)
+
+    trainfile_path = "./data/ImageNetMini/train/"
+    valfile_path = "./data/ImageNetMini/val/"
+
+    # Load the datasets
+    train_dataset = RemoteImageFolder(root=trainfile_path, transform=train_transforms)
+    val_dataset = RemoteImageFolder(root=valfile_path, transform=val_transforms)
+
+    # Create the dataloaders
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers, pin_memory=True)
+    val_loader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers, pin_memory=True)
+    time4 = time.time()
+    print(f"Data preparing time: {time4-time3:2f}.")
+
+    training(train_loader, val_loader)
 
 if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # train_locally()
-    train_remote()
+    train_locally()
     train_remote_localcache()
+    train_remote()
+    train_zip()

@@ -1,0 +1,35 @@
+Read from Pelican using pelicanfs.
+
+Epoch 1/10, Training Loss: 1.1407
+Epoch 1/10, Validation Loss: 0.6926, Accuracy: 0.7809, Time Taken: 1138.80 seconds
+
+Epoch 2/10, Training Loss: 0.8152
+Epoch 2/10, Validation Loss: 0.6254, Accuracy: 0.8020, Time Taken: 1113.87 seconds
+
+Epoch 3/10, Training Loss: 0.7164
+Epoch 3/10, Validation Loss: 0.4831, Accuracy: 0.8522, Time Taken: 1074.37 seconds
+
+Epoch 4/10, Training Loss: 0.6283
+Epoch 4/10, Validation Loss: 0.4641, Accuracy: 0.8548, Time Taken: 1094.85 seconds
+
+Epoch 5/10, Training Loss: 0.6057
+Epoch 5/10, Validation Loss: 0.4219, Accuracy: 0.8683, Time Taken: 1086.80 seconds
+
+Epoch 6/10, Training Loss: 0.5727
+Epoch 6/10, Validation Loss: 0.3740, Accuracy: 0.8792, Time Taken: 1094.54 seconds
+
+Epoch 7/10, Training Loss: 0.5550
+Epoch 7/10, Validation Loss: 0.4256, Accuracy: 0.8591, Time Taken: 1119.60 seconds
+
+Epoch 8/10, Training Loss: 0.5281
+Epoch 8/10, Validation Loss: 0.3873, Accuracy: 0.8785, Time Taken: 1090.34 seconds
+
+Epoch 9/10, Training Loss: 0.5102
+Epoch 9/10, Validation Loss: 0.3713, Accuracy: 0.8897, Time Taken: 1142.84 seconds
+
+Epoch 10/10, Training Loss: 0.4883
+Epoch 10/10, Validation Loss: 0.3427, Accuracy: 0.8917, Time Taken: 1141.83 seconds
+
+
+
+
