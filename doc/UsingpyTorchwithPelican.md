@@ -97,3 +97,4 @@ fs.ls(valfile_path)
 
 You should either pass the federation protocal to fsspec's `filesystem`, or discovery URL of your federation to `PelicanFileSystem` in pelicanfs. 
 
+fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./", verify=False)

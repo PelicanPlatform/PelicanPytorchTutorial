@@ -249,7 +249,6 @@ def train_remote_localcache():
 
     training(train_loader, val_loader)
 
-
 def train_zip():
     args = parser.parse_args()
     print()
@@ -261,15 +260,15 @@ def train_zip():
     time2 = time.time()
     print(f"  - Time used: {time2-time1:2f}.",)
 
-    
+
     print("Extracting ImageNetMini.zip")
     file = zipfile.ZipFile('ImageNetMini.zip')
-    file.extractall('./data')
+    file.extractall('./')
     time3 = time.time()
     print(f"  - Time used: {time3-time2:2f}.",)
 
-    trainfile_path = "./data/ImageNetMini/train/"
-    valfile_path = "./data/ImageNetMini/val/"
+    trainfile_path = "./ImageNetMini/train/"
+    valfile_path = "./ImageNetMini/val/"
 
     # Load the datasets
     train_dataset = RemoteImageFolder(root=trainfile_path, transform=train_transforms)
@@ -285,7 +284,7 @@ def train_zip():
 
 if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    train_zip()
     train_locally()
     train_remote_localcache()
     train_remote()
-    train_zip()
