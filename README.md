@@ -20,17 +20,17 @@ Related tools:
 
 ## Current data under `chtc/PUBLIC/hzhao292` name space
 
-| Size | File Name                                  |
-| ---- | ------------------------------------------ |
-| 22M  | fashion-mnist_test.csv                     |
-| 5.4M | fashion-mnist_test.zip                     |
-| 127M | fashion-mnist_train.csv                    |
-| 33M  | fashion-mnist_train.zip                    |
-| 161G | ILSVRC                                     |
-| 27M  | ImageNet                                   |
-| 156G | imagenet-object-localization-challenge.zip |
-| 1.5G | imagenette2                                |
-| 1.5G | imagenette2.tgz                            |
+| Size | File Name               |
+| ---- | ----------------------- |
+| 22M  | fashion-mnist_test.csv  |
+| 5.4M | fashion-mnist_test.zip  |
+| 127M | fashion-mnist_train.csv |
+| 33M  | fashion-mnist_train.zip |
+| 161G | ImageNet                |
+| 156G | ImageNet.zip            |
+| 1.5G | ImageNetMini.tgz        |
+| 1.5G | ImageNetMini            |
+|      |                         |
 
 ### Data for Benchmarking1
 
@@ -43,18 +43,18 @@ Related tools:
 
 ### Data for Benchmarking2
 
-| Size | File Name                                  |
-| ---- | ------------------------------------------ |
-| 161G | ILSVRC                                     |
-| 156G | imagenet-object-localization-challenge.zip |
-| 1.5G | ImageNetMini                               |
-| 1.5G | ImageNetMini.tgz                           |
+| Size | File Name        |
+| ---- | ---------------- |
+| 161G | ImageNet         |
+| 156G | ImageNet.zip     |
+| 1.5G | ImageNetMini.tgz |
+| 1.5G | ImageNetMini     |
 
-For ImageNet standard data, train file is under ILSVRC/Data/CLS-LOC/train. 
+For ImageNet standard data, train file is under /train. 
 
 Under this path, there is 1000 directories named with corresponding classes of these images inside the directories. 
 
-Val and Test follow the same rool after preparation. 
+Val and Test follow the same rule after preparation. 
 
 ImageNetMini is a subset for conveniently testing.  It only have 10 classes. About 1000 images in each class.
 

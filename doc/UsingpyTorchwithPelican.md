@@ -13,10 +13,14 @@ For detailed of Pelican Installation, see [here](https://docs.pelicanplatform.or
 For macOS and Linux, run `which pelican` to verify your installation. And use following command to start your first pelican operation!
 
 ```shell
-pelican object copy pelican://osg-htc.org/ospool/uc-shared/public/OSG-Staff/validation/test.txt .
+$ pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt test.txt
+$ ls
+test.txt
+$ cat test.txt
+Hello, World!
 ```
 
-
+For pytorch installation, see [here](https://pytorch.org/get-started/locally/).
 
 ## Access Pelican's data
 
@@ -32,32 +36,21 @@ pelican object get pelican://<federation-url></namespace-prefix></path/to/file> 
 
 An example for you to try out:
 
-```pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/ImageNetMini.tgz ImageNetMini.tgz```
+``````
+pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/ImageNetMini.tgz ImageNetMini.tgz
+``````
 
-You should see a progress bar output and eventually a file named `downloaded-test.txt` within your local directory:
+You should see a progress bar output and eventually a file named `ImageNetMini.tgz` within your local directory:
+
+```shell
+$ pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/ImageNetMini.tgz ImageNetMini.tgz 
+ImageNetMini.tgz 1.34 GiB / 1.45 GiB [========================>--] 0s ] 0.00 b/s
 
 ```
-$ pelican object get pelican://osg-htc.org/ospool/uc-shared/public/OSG-Staff/validation/test.txt downloaded-test.txtdownloaded-test.txt 
-14.00 b / 14.00 b [==============================================================================] Done!
-$ lsdownloaded-test.txt$ cat downloaded-test.txtHello, World!
-```
-
-```python
-import pelicanfs
-import torch
-
-from pelicanfs.core import PelicanFileSystem
-
-fs = PelicanFileSystem()
-valfile_path = "/chtc/PUBLIC/hzhao292/ImageNetMini/val"
-fs.ls(valfile_path)
-```
-
-
 
 If the target object is a directory, you can download the whole directory with anything in it using **--recursive** flag.
 
- ```pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/ImageNetMini --recursive  ImageNetMini```
+ ```pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/ImageNetMini --recursive ImageNetMini```
 
 > Note: We do not recommend this way, because it will transfer file by file, which will result in many requests. And it's slow.
 
@@ -85,7 +78,7 @@ fs.ls(valfile_path)
 
 Second: Using Pelican File System
 
-If you are using the pelican file system, you need to pass the discovery URL of the Federation, in this case. We are passing OSDF's discovery URL.
+If you are using the pelican file system, you need to pass the discovery URL of the Federation because it doesn't know which federation are you come from, in this case, We are passing OSDF's discovery URL.
 
 ```python
 from pelicanfs.core import PelicanFileSystem
@@ -95,6 +88,13 @@ valfile_path = "/chtc/PUBLIC/hzhao292/ImageNetMini/val"
 fs.ls(valfile_path)
 ```
 
-You should either pass the federation protocal to fsspec's `filesystem`, or discovery URL of your federation to `PelicanFileSystem` in pelicanfs. 
+In a nutshell, you should either pass the federation protocal to fsspec's `filesystem`, or discovery URL of your federation to `PelicanFileSystem` in pelicanfs. 
 
-fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./", verify=False)
+To download file to your local file system, use `get()`.
+
+```python
+fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
+```
+
+
+
