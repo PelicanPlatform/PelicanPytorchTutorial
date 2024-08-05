@@ -100,3 +100,104 @@ fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
 
 
 
+Example speed benchmark result:
+
+| Method                                  | Speed |
+| --------------------------------------- | ----- |
+| Pelican CLI download zip                | ~2s   |
+| Pelican CLI download folder recursively | ~9s   |
+| fsspec get()                            | ~11s  |
+
+
+
+#### Local Cache data
+
+fsspec allows you to access data on remote file systems, that is its purpose. However, such access can often be rather slow compared to local storage, so as well as buffering (see above), the option exists to copy files locally when you first access them, and thereafter to use the local data. This local cache of data might be temporary (i.e., attached to the process and discarded when the process ends) or at some specific location in your local storage.
+
+The following example creates a file-based cache for osdf federation. 
+
+```{python}
+fs = fsspec.filesystem("filecache", target_protocol='pelican', cache_storage='tmp/files/')
+with fs.open("pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt") as f:
+    print(f.read(1024))
+```
+
+Each time you open a remote file on pelican origin using this `fs`, it will first copy it to a local temporary directory, and then all further access will use the local file. Since we specify a particular local location, the files will persist and can be reused from future sessions, although you can also set policies to have cached files expire after some time, or to check the remote file system on each open, to see if the target file has changed since it was copied.
+
+With the top-level functions open, open_local and open_files, you can use the same set of kwargs as the example above, or you can chain the URL - the following would be the equivalent:
+
+```{python}
+with fsspec.open("filecache::pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt", filecache={'cache_storage':'tmp/files'}) as f:
+    print(f.read(1024))
+```
+
+
+
+
+
+
+
+## Step 3: Loading data using pyTorch
+
+PyTorch provides two data primitives: `torch.utils.data.DataLoader` and `torch.utils.data.Dataset` that allow you to use pre-loaded datasets as well as your own data. `Dataset` stores the samples and their corresponding labels, and `DataLoader` wraps an iterable around the `Dataset` to enable easy access to the samples.
+
+The process involves creating a custom dataset for your files, preparing your data for training with `DataLoaders`, and then iterating through the `DataLoader` during training.
+
+For details of Datasets&DataLoader, see [pytorch tutorial](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html#datasets-dataloaders). 
+
+
+
+Below is an example of how to create a custom dataset, fetch data from a Pelican origin using fsspec, and then pass it through to our custom dataset and DataLoader. 
+
+```{python}
+import pandas as pd
+from pelicanfs.core import PelicanFileSystem
+from torch.utils.data import Dataset, DataLoader, TensorDataset
+import torchvision.transforms as transforms
+
+class FashionDataset(Dataset):  
+    def __init__(self, data, transform = None):
+        """Method to initilaize variables.""" 
+        self.fashion_MNIST = list(data.values)
+        self.transform = transform
+        
+        label = []
+        image = []
+        
+        for i in self.fashion_MNIST:
+             # first column is of labels.
+            label.append(i[0])
+            image.append(i[1:])
+        self.labels = np.asarray(label)
+        # Dimension of Images = 28 * 28 * 1. where height = width = 28 and color_channels = 1.
+        self.images = np.asarray(image).reshape(-1, 28, 28, 1).astype('float32')
+
+    def __getitem__(self, index):
+        label = self.labels[index]
+        image = self.images[index]
+        
+        if self.transform is not None:
+            image = self.transform(image)
+
+        return image, label
+
+    def __len__(self):
+        return len(self.images)
+```
+
+```{python}
+fs = PelicanFileSystem("pelican://osg-htc.org")
+train_csv = pd.read_csv(fs.open('/chtc/PUBLIC/hzhao292/fashion-mnist_train.csv', 'rb'))
+test_csv = pd.read_csv(fs.open('/chtc/PUBLIC/hzhao292/fashion-mnist_test.csv', 'rb'))
+
+train_set = FashionDataset(train_csv, transform=transforms.Compose([transforms.ToTensor()]))
+test_set = FashionDataset(test_csv, transform=transforms.Compose([transforms.ToTensor()]))
+
+train_loader = DataLoader(train_set, batch_size=100)
+test_loader = DataLoader(train_set, batch_size=100)
+```
+
+The example is from Benchmark1 notebook, see full script and try to run it by yourself!
+
+
+
