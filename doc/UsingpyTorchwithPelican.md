@@ -1,40 +1,55 @@
+# Using PyTorch with Pelican
 
+This tutorial guides you through setting up and using PyTorch with Pelican for efficient data management and processing.
 
-# Using pyTorch with Pelican
+## 1. Install Pelican and PyTorch
 
-## 1. Have your Pelican and PyToch installed. 
+Ensure that both Pelican and PyTorch are installed on your system.
 
-For macOS and Linux, run `which pelican` to verify your installation. And use following command to start your first pelican operation!
+### Verification
+
+For macOS and Linux, run the following command to verify your Pelican installation:
+
+```shell
+which pelican
+
+Use the following command to start your first Pelican operation:
 
 ```shell
 $ pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt test.txt
-$ ls
-test.txt
 $ cat test.txt
+```
+
+#### Expected output:
+
+```shell
 Hello, World!
 ```
+
 
 For details of Pelican Installation, see [here](https://docs.pelicanplatform.org/install)
 
 For pytorch installation, see [here](https://pytorch.org/get-started/locally/).
 
+
+
 ## 2. Access Pelican's data
 
 ### 2.1: Using command line to download data
 
-Before grabing your data, I believe you have known the location of it. In this case, you should have known your target origin's federation, name space, and path to target file. 
+Before downloading your data, I believe you have known the location of it. In this case, you should have known your target origin's federation, name space, and path to target file. 
 
-Then you can use `object get` command to download your data to local destination. For more details, read [this](https://docs.pelicanplatform.org/getting-data-with-pelican/client)
+Then, use `object get` command to download your data to local destination. Below is the format to follow. For more details, read the [Pelican Client Guide]((https://docs.pelicanplatform.org/getting-data-with-pelican/client)).
 
-```{shell}
+```shell
 pelican object get pelican://<federation-url></namespace-prefix></path/to/file> <local/path/to/file>
 ```
 
 An example for you to try out:
 
-``````
+```shell
 pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/ImageNetMini.tgz ImageNetMini.tgz
-``````
+```
 
 You should see a progress bar output and eventually a file named `ImageNetMini.tgz` within your local directory:
 
@@ -43,6 +58,7 @@ $ pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/ImageNetMini.tgz
 ImageNetMini.tgz 1.34 GiB / 1.45 GiB [========================>--] 0s ] 0.00 b/s
 
 ```
+
 
 If the target object is a directory, you can download the whole directory with anything in it using **--recursive** flag.
 
@@ -98,13 +114,15 @@ fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
 
 
 
-### Example speed benchmark result:
+### Download speed benchmark results:
 
-| Method                                  | Speed |
-| --------------------------------------- | ----- |
-| Pelican CLI download zip                | ~2s   |
-| Pelican CLI download folder recursively | ~9s   |
-| fsspec get()                            | ~11s  |
+Downloading `ImageNetMini.zip`
+
+| Method                                               | Speed |
+| ---------------------------------------------------  | ----- |
+| Pelican CLI download ImageNetMini.zip                | ~2s   |
+| Pelican CLI download ImageNetMini folder recursively | ~9s   |
+| fsspec get() download ImageNetMini.zip               | ~11s  |
 
 
 
@@ -114,7 +132,7 @@ fsspec allows you to access data on remote file systems, that is its purpose. Ho
 
 The following example creates a file-based cache for osdf federation. 
 
-```{python}
+```python
 fs = fsspec.filesystem("filecache", target_protocol='pelican', cache_storage='tmp/files/')
 with fs.open("pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt") as f:
     print(f.read(1024))
@@ -124,7 +142,7 @@ Each time you open a remote file on pelican origin using this `fs`, it will firs
 
 With the top-level functions open, open_local and open_files, you can use the same set of kwargs as the example above, or you can chain the URL - the following would be the equivalent:
 
-```{python}
+```python
 with fsspec.open("filecache::pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt", filecache={'cache_storage':'tmp/files'}) as f:
     print(f.read(1024))
 ```
@@ -141,7 +159,7 @@ For details of Datasets&DataLoader, see [pytorch tutorial](https://pytorch.org/t
 
 Below is an example from Benchmark1 notebook of how to create a custom dataset, fetch data from a Pelican origin using fsspec, and then pass it through to our custom dataset and DataLoader. 
 
-```{python}
+```python
 import pandas as pd
 from pelicanfs.core import PelicanFileSystem
 from torch.utils.data import Dataset, DataLoader, TensorDataset
@@ -178,7 +196,8 @@ class FashionDataset(Dataset):
         return len(self.images)
 ```
 
-```{python}
+
+```python
 # Create a Pelican File System
 fs = PelicanFileSystem("pelican://osg-htc.org")
 
