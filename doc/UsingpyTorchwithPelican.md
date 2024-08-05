@@ -2,11 +2,7 @@
 
 # Using pyTorch with Pelican
 
-[toc]
-
-## Step1: Have your Pelican and PyToch installed. 
-
-For detailed of Pelican Installation, see [here](https://docs.pelicanplatform.org/install)
+## 1. Have your Pelican and PyToch installed. 
 
 For macOS and Linux, run `which pelican` to verify your installation. And use following command to start your first pelican operation!
 
@@ -18,11 +14,13 @@ $ cat test.txt
 Hello, World!
 ```
 
+For details of Pelican Installation, see [here](https://docs.pelicanplatform.org/install)
+
 For pytorch installation, see [here](https://pytorch.org/get-started/locally/).
 
-## Step2: Access Pelican's data
+## 2. Access Pelican's data
 
-### Option 1: Download data using command line 
+### 2.1: Using command line to download data
 
 Before grabing your data, I believe you have known the location of it. In this case, you should have known your target origin's federation, name space, and path to target file. 
 
@@ -50,11 +48,9 @@ If the target object is a directory, you can download the whole directory with a
 
  ```pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/ImageNetMini --recursive ImageNetMini```
 
-> Note: We do not recommend this way, because it will transfer file by file, which will result in many requests. And it's slow. 
->
-> For this dataset, downloading tgz file takes about 2 seconds, downloading the folder recursively takes about 9 seconds.
 
-### Option 2: Using pelicanfs Access/download data
+
+### 2.2: Using pelicanfs(fsspec) to Access/download data
 
 Using the command line is easy, buy you may want to do some more complicated operation, or just want to integrate it to your python code to make them streamlined and consist. In this way, we have `pelicanfs` library, which implement the [`fsspec`](https://filesystem-spec.readthedocs.io/en/latest/index.html). `fsspec` exists to provide a familiar API that will work the same whatever the storage backend. This means, if you have some data on google cloud or s3, you can access them all the same! (For more detail information,  please read [fsspec's document](https://filesystem-spec.readthedocs.io/en/latest/index.html))
 
@@ -64,7 +60,7 @@ To install pelicanfs, run:
 pip install pelicanfs
 ```
 
-#### Method 1: Use fsspec with protocal
+#### 2.2.1: Use fsspec with protocal
 
 In this way, we initialize an OSDF File System, then we can access our file in it. 
 
@@ -76,7 +72,7 @@ valfile_path = "/chtc/PUBLIC/hzhao292/ImageNetMini/val"
 fs.ls(valfile_path)
 ```
 
-#### Method 2: Using Pelican File System
+#### 2.2.2: Using Pelican File System
 
 If you are using the pelican file system, you need to pass the discovery URL of the Federation because it doesn't know which federation are you come from, in this case, We are passing OSDF's discovery URL.
 
@@ -90,9 +86,11 @@ fs.ls(valfile_path)
 
 In a nutshell, you should either pass the federation protocal to fsspec's `filesystem`, or discovery URL of your federation to `PelicanFileSystem` in pelicanfs. 
 
-#### Download data
+#### 2.2.3: Download data
 
 To download file to your local file system, use `get()`.
+
+Below is an example to download a zip file to current directory. 
 
 ```python
 fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
@@ -100,7 +98,7 @@ fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
 
 
 
-Example speed benchmark result:
+### Example speed benchmark result:
 
 | Method                                  | Speed |
 | --------------------------------------- | ----- |
@@ -110,7 +108,7 @@ Example speed benchmark result:
 
 
 
-#### Local Cache data
+#### 2.2.4: Local Cache data
 
 fsspec allows you to access data on remote file systems, that is its purpose. However, such access can often be rather slow compared to local storage, so as well as buffering (see above), the option exists to copy files locally when you first access them, and thereafter to use the local data. This local cache of data might be temporary (i.e., attached to the process and discarded when the process ends) or at some specific location in your local storage.
 
@@ -133,11 +131,7 @@ with fsspec.open("filecache::pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt
 
 
 
-
-
-
-
-## Step 3: Loading data using pyTorch
+## 3. Loading data using pyTorch
 
 PyTorch provides two data primitives: `torch.utils.data.DataLoader` and `torch.utils.data.Dataset` that allow you to use pre-loaded datasets as well as your own data. `Dataset` stores the samples and their corresponding labels, and `DataLoader` wraps an iterable around the `Dataset` to enable easy access to the samples.
 
@@ -145,9 +139,7 @@ The process involves creating a custom dataset for your files, preparing your da
 
 For details of Datasets&DataLoader, see [pytorch tutorial](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html#datasets-dataloaders). 
 
-
-
-Below is an example of how to create a custom dataset, fetch data from a Pelican origin using fsspec, and then pass it through to our custom dataset and DataLoader. 
+Below is an example from Benchmark1 notebook of how to create a custom dataset, fetch data from a Pelican origin using fsspec, and then pass it through to our custom dataset and DataLoader. 
 
 ```{python}
 import pandas as pd
@@ -155,6 +147,7 @@ from pelicanfs.core import PelicanFileSystem
 from torch.utils.data import Dataset, DataLoader, TensorDataset
 import torchvision.transforms as transforms
 
+# Customed dataset 
 class FashionDataset(Dataset):  
     def __init__(self, data, transform = None):
         """Method to initilaize variables.""" 
@@ -186,18 +179,21 @@ class FashionDataset(Dataset):
 ```
 
 ```{python}
+# Create a Pelican File System
 fs = PelicanFileSystem("pelican://osg-htc.org")
+
+# Using our file system to open the file on remote origin
 train_csv = pd.read_csv(fs.open('/chtc/PUBLIC/hzhao292/fashion-mnist_train.csv', 'rb'))
 test_csv = pd.read_csv(fs.open('/chtc/PUBLIC/hzhao292/fashion-mnist_test.csv', 'rb'))
 
+# Passng the opened file to our costomed dataset
 train_set = FashionDataset(train_csv, transform=transforms.Compose([transforms.ToTensor()]))
 test_set = FashionDataset(test_csv, transform=transforms.Compose([transforms.ToTensor()]))
 
-train_loader = DataLoader(train_set, batch_size=100)
-test_loader = DataLoader(train_set, batch_size=100)
+# Pass the dataset to DataLoader
+train_loader = DataLoader(train_set, batch_size=128)
+test_loader = DataLoader(train_set, batch_size=128)
 ```
-
-The example is from Benchmark1 notebook, see full script and try to run it by yourself!
 
 
 
