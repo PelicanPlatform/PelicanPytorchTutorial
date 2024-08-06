@@ -1,6 +1,6 @@
 # Using pyTorch with Pelican, and HTCondor
 
-[toc]
+
 
 This is an integrated tutorial for using pytorch with Pelican and HTCondor. Before proceeding, ensure you have a CHTC account. If you don't have one, see [How to Request a CHTC Account](https://chtc.cs.wisc.edu/uw-research-computing/account-details.html).
 
@@ -51,9 +51,9 @@ Here's an overview of how to handle files of different sizes. Since files larger
 - small file: on your ap
 - big file: pelican protocol
 
-### 2.2 Via /staging
+### 2.2 Via `/staging`
 
-
+`/staging` is a distinct location for staging data that is too large to be handled at scale via the default HTCondor file transfer mechanism.This location should be used for jobs that require input files larger than 100MB and/or that generate output files larger than 3-4GB.
 
 #### 2.2.1 Check your Quotas
 
