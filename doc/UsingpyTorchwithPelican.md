@@ -15,7 +15,6 @@ which pelican
 
 Use the following command to start your first Pelican operation:
 
-```shell
 $ pelican object get pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt test.txt
 $ cat test.txt
 ```

@@ -3,4 +3,5 @@ benchmark/.ipynb_checkpoints
 Others/.ipynb_checkpoints/
 /.ipynb_checkpoints
 benchmark/input/
+benchmark/tmp
 .gitignore
