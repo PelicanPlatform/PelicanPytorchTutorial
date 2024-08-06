@@ -32,17 +32,15 @@ To check the size of a file, do:
 du -sh filename
 ```
 
-
-
 ## 2. Managing your needed files
 
 Here's an overview of how to handle files of different sizes. Since files larger than 100MB, or even 1GB, are common in machine learning training jobs, we will focus on using `/staging` here. Beyond these, OSDF protocol links can also be passed directly to the HTCondor execute point!
 
-| Input Sizes                                                  | Output Sizes             | Link to Guide                                                | File Location | How to Transfer                                      |      |
-| :----------------------------------------------------------- | :----------------------- | :----------------------------------------------------------- | :------------ | :--------------------------------------------------- | :--- |
-| 0 - 100 MB per file, up to 500 MB per job                    | 0 - 5 GB per job         | [Small Input/Output File Transfer via **HTCondor**](https://chtc.cs.wisc.edu/uw-research-computing/file-availability.html) | `/home`       | **submit file**; filename in `transfer_input_files`  |      |
-| 100 MB - 1 GB per repeatedly-used file                       | Not available for output | [Large Input File Availability Via **Squid**](https://chtc.cs.wisc.edu/uw-research-computing/file-avail-squid.html) | `/squid`      | **submit file**; http link in `transfer_input_files` |      |
-| 100 MB - TBs per job-specific file; repeatedly-used files > 1GB | 4 GB - TBs per job       | [Large Input and Output File Availability Via **Staging**](https://chtc.cs.wisc.edu/uw-research-computing/file-avail-largedata.html) | `/staging`    | **job executable**; copy or move within the job      |      |
+| Input Sizes                                                  | Output Sizes             | Link to Guide                                                | File Location | How to Transfer                                      | 
+| :----------------------------------------------------------- | :----------------------- | :----------------------------------------------------------- | :------------ | :--------------------------------------------------- |
+| 0 - 100 MB per file, up to 500 MB per job                    | 0 - 5 GB per job         | [Small Input/Output File Transfer via **HTCondor**](https://chtc.cs.wisc.edu/uw-research-computing/file-availability.html) | `/home`       | **submit file**; filename in `transfer_input_files`  |
+| 100 MB - 1 GB per repeatedly-used file                       | Not available for output | [Large Input File Availability Via **Squid**](https://chtc.cs.wisc.edu/uw-research-computing/file-avail-squid.html) | `/squid`      | **submit file**; http link in `transfer_input_files` |  
+| 100 MB - TBs per job-specific file; repeatedly-used files > 1GB | 4 GB - TBs per job       | [Large Input and Output File Availability Via **Staging**](https://chtc.cs.wisc.edu/uw-research-computing/file-avail-largedata.html) | `/staging`    | **job executable**; copy or move within the job      |    
 
 
 
