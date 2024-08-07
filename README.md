@@ -20,17 +20,22 @@ Related tools:
 
 ## Current data under `chtc/PUBLIC/hzhao292` name space
 
-| Size | File Name               |
+| Size | File                    |
 | ---- | ----------------------- |
 | 22M  | fashion-mnist_test.csv  |
 | 5.4M | fashion-mnist_test.zip  |
 | 127M | fashion-mnist_train.csv |
 | 33M  | fashion-mnist_train.zip |
-| 161G | ImageNet                |
-| 156G | ImageNet.zip            |
-| 1.5G | ImageNetMini.tgz        |
+| 159G | ImageNet                |
 | 1.5G | ImageNetMini            |
-|      |                         |
+| 1.5G | ImageNetMini.tgz        |
+| 1.5G | ImageNetMini.zip        |
+| 22G  | ImageNetSmall           |
+| 21G  | ImageNetSmall.zip       |
+| 114M | ImageNetTini            |
+| 112M | ImageNetTini.zip        |
+| 156G | ImageNet.zip            |
+| 4.0K | test.txt                |
 
 ### Data for Benchmarking1
 

@@ -46,8 +46,11 @@ Here's an overview of how to handle files of different sizes. Since files larger
 
 ### 2.1 Via `transfer_input_files`
 
-- small file: on your ap
-- big file: pelican protocol
+First, specify if and when to transfer files in your `.sub` file. 
+
+This comma-separated list specifies any other files, URLs, or directories that HTCondor is to transfer to the remote scratch directory, to set up the execution environment for the job before it is run. 
+
+
 
 ### 2.2 Via `/staging`
 

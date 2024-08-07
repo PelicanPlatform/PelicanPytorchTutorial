@@ -117,13 +117,17 @@ fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
 
 Downloading `ImageNetMini.zip`
 
-| Method                                               | Speed |
-| ---------------------------------------------------  | ----- |
-| Pelican CLI download ImageNetMini.zip                | ~2s   |
-| Pelican CLI download ImageNetMini folder recursively | ~9s   |
-| fsspec get() download ImageNetMini.zip               | ~11s  |
+| METHOD                                                       | SPEED |
+| ------------------------------------------------------------ | ----- |
+| Pelican CLI download ImageNetMini.zip (cache cold)           | ~9s   |
+| Pelican CLI download ImageNetMini.zip (cache hot)            | ~2s   |
+| Pelican CLI download ImageNetMini folder recursively (cache cold) | ~55s  |
+| Pelican CLI download ImageNetMini folder recursively (cache hot) | ~9s   |
+| fsspec get() download ImageNetMini.zip                       | ~13s  |
 
 
+
+![image-20240807155822698](/Users/a/Library/Application Support/typora-user-images/image-20240807155822698.png)![image-20240807170130462](/Users/a/Library/Application Support/typora-user-images/image-20240807170130462.png)
 
 #### 2.2.4: Local Cache data
 
@@ -146,7 +150,7 @@ with fsspec.open("filecache::pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt
     print(f.read(1024))
 ```
 
-
+> Local caching can be **slow** if it involves frequent random access to **many small files**, as each access might involve metadata operations and checks for cache validity. This can introduce significant overhead when dealing with numerous files.
 
 ## 3. Loading data using pyTorch
 
