@@ -4,7 +4,7 @@
 
 This is an integrated tutorial for using pytorch with Pelican and HTCondor. Before proceeding, ensure you have a CHTC account. If you don't have one, see [How to Request a CHTC Account](https://chtc.cs.wisc.edu/uw-research-computing/account-details.html).
 
-For beginners, each step here can be a little bit challenged. We will disucss typical case for each step here to provide an overview and help you get started quickly.  But for each step, there is a detailed documentation for further exploration. For you reference, all the related tutorial are listed here.
+For beginners, each step here can be a little bit challenging. We will disucss typical case for each step to provide an overview and help you get started quickly. For each step there is detailed documentation for further exploration. For you reference, all the related tutorials are listed here.
 
 **Related Tutorial:**
 
@@ -22,11 +22,11 @@ For beginners, each step here can be a little bit challenged. We will disucss ty
 
 ## 1. Create Your Environment for Your Job
 
-HTC's executed point usually only have some necessary softwares installed. Therefore, if you're using PyTorch and other libraries, you need to create an environment for your job.
+CHTC's execution point usually only has some of the necessary software installed. Therefore, if you're using PyTorch and other libraries, you need to create an environment for your job.
 
-Following this tutorial: [Create a Portable Python Installation with Miniconda](https://chtc.cs.wisc.edu/uw-research-computing/conda-installation.html). You should have a tar file `env-name.tar.gz`. In most cases, the file is larger than 1GB, you should use the large data filesystem staging provided by CHTC.
+Following this tutorial: [Create a Portable Python Installation with Miniconda](https://chtc.cs.wisc.edu/uw-research-computing/conda-installation.html). You should have a tar file `env-name.tar.gz`. In most cases, the file is larger than 1GB and you should use the large data filesystem staging provided by CHTC.
 
-To check the size of a file, do:
+To check the size of a file, run:
 
 ```shell
 du -sh filename
@@ -34,7 +34,7 @@ du -sh filename
 
 ## 2. Managing your needed files
 
-Here's an overview of how to handle files of different sizes. Since files larger than 100MB, or even 1GB, are common in machine learning training jobs, we will focus on using `/staging` here. Beyond these, OSDF protocol links can also be passed directly to the HTCondor execute point!
+Here's an overview of how to handle files of different sizes. Since files larger than 100MB, or even 1GB, are common in machine learning training jobs, we will focus on using `/staging` here. Beyond this, OSDF protocol links can also be passed directly to the HTCondor execute point!
 
 | Input Sizes                                                  | Output Sizes             | Link to Guide                                                | File Location | How to Transfer                                      | 
 | :----------------------------------------------------------- | :----------------------- | :----------------------------------------------------------- | :------------ | :--------------------------------------------------- |
@@ -66,11 +66,11 @@ get_quotas /path/to/group/directory
 
 #### 2.2.2 Request Quota Changes
 
-If you want to start using `/staging`, request a Quota change via this [form](https://uwmadison.co1.qualtrics.com/jfe/form/SV_0JMj2a83dHcwX5k). If you do not receive an automated email from [chtc@cs.wisc.edu](mailto:chtc@cs.wisc.edu) within a few hours of completing the form, OR if you do not receive a response from a human within two business days (M-F), please email [chtc@cs.wisc.edu](mailto:chtc@cs.wisc.edu).
+If you want to start using `/staging`, request a Quota change via this [form](https://uwmadison.co1.qualtrics.com/jfe/form/SV_0JMj2a83dHcwX5k). If you do not receive an automated email from [chtc@cs.wisc.edu](mailto:chtc@cs.wisc.edu) within a few hours of completing the form OR if you do not receive a response from a human within two business days (M-F), please email [chtc@cs.wisc.edu](mailto:chtc@cs.wisc.edu).
 
 #### 2.2.3 Moving you file to `/staging`
 
-Once assigned, you should have some space under `/staging/your-username`. To transfer the large file, such as our our `env-name.tar.gz`, if the file in on your local linux/mac computer, use `scp` command via CHTC's **transfer sever** instead of a CHTC submit server. 
+Once assigned, you should have some space under `/staging/your-username`. To transfer a large file, such as our our `env-name.tar.gz`, if the file in on your local linux/mac computer, use `scp` command via CHTC's **transfer sever** instead of a CHTC submit server. 
 
 ```shell
 $ scp /localpath/env-name.tar.gz username@transfer.chtc.wisc.edu:/staging/username/ 
@@ -170,11 +170,11 @@ Requirements = (Target.HasCHTCStaging == true)
 queue 1
 ```
 
-Here, we specify the name our executable file, and also names of log file, file storaged standard output and file for error message.
+Here, we specify the name our executable file, and also names of log file, standard output file, and an error message file.
 
-Then are files we will need during the job running, this will included the `bm.py` script it self, and the data it used. For the env package, we are using it through staging, therefore, it shouldn't show up here. Instead, only add `Requirements = (Target.HasCHTCStaging == true)` to let HTCondor know you have file in staging.
+Follwoing are the files we will need during the job execution. This will include the `bm.py` script itself and the data it uses. For the env package, we are using it through staging, therefore, it shouldn't show up here. Instead, only add `Requirements = (Target.HasCHTCStaging == true)` to let HTCondor know you have file in staging.
 
-Then in the file, tells HTCondor what kinds of resourse you job need, like `request_memory` and `request_cpus` for how much memory and how many cpu cores are needed. `request_disk` for the disk size the job will need.
+After, tell HTCondor what kinds of resourses your job will need. `request_memory` and `request_cpus` specifies how much memory and how many cpu cores your jobs will need. `request_disk` for the disk size the job will need.
 
 If you want to utilize GPUs, add `request_gpus`.
 
