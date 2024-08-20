@@ -1,3 +1,5 @@
+
+
 # Using PyTorch with Pelican
 
 This tutorial guides you through setting up and using PyTorch with Pelican for efficient data management and processing.
@@ -119,11 +121,11 @@ fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
 
 ### Download speed benchmarking results:
 
-Downloading `ImageNetMini.zip` (1.5G):
+#### Downloading `ImageNetMini` (1.5G):
 
 The ImageNetMini dataset contains 13,418 small image files across various folders. Benchmarking results indicate that using the Pelican CLI to download the entire folder recursively takes significantly longer compared to downloading a single ZIP file.
 
-Here's the hierarchy of ImageNetMini Dateset: 
+##### Hierarchy of ImageNetMini Dateset: 
 
 (The class names and images are simplified for clarity,  not the real file names.)
 
@@ -146,54 +148,62 @@ ImageNetMini
 │   └───...
 ```
 
+##### Benchmarking results:
+
+###### Table:
+
+<center>
+  <table class="tg"><thead>
+    <tr>
+      <th class="tg-0lax">Method</th>
+      <th class="tg-0lax">cache</th>
+      <th class="tg-0lax">Speed(s)</th>
+    </tr></thead>
+  <tbody>
+    <tr>
+      <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">4.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">14.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">11</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">236</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax" rowspan="2">fsspec get()</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">14.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">24.5</td>
+    </tr>
+  </tbody>
+  </table>
+</center>
+
+###### Bar chart:
+
+<div style="text-align: center;">
+    <img src="img/bar-graph1.svg" alt="Description">
+</div>
 
 
-<table class="tg"><thead>
-  <tr>
-    <th class="tg-0lax">Method</th>
-    <th class="tg-0lax">cache</th>
-    <th class="tg-0lax">Speed(s)</th>
-  </tr></thead>
-<tbody>
-  <tr>
-    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">4.5</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">14.5</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">11</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">236</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax" rowspan="2">fsspec get()</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">14.5</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">24.5</td>
-  </tr>
-</tbody>
-</table>
 
+#### Downloading `ImageNetMini` with Class Folders Zipped:
 
+To better illustrate the differences, we created a new version of the ImageNetMini dataset by zipping the class folders without compression. This approach significantly reduced the total number of files to 23 while still preserving the overall size.
 
-![bar-graph1](img/bar-graph1.svg)
-
-
-
-To highlight the differences, another version of the ImageNetMini dataset was created by zipping the class folders, significantly reducing the total number of files to 23.
-
-Hierarchy of ImageNetMini Dataset After Zipping Class Folders:
+##### Hierarchy of ImageNetMini Dataset After Zipping Class Folders:
 
 ```shell
 ImageNetMini
@@ -208,48 +218,64 @@ ImageNetMini
 │   ├───Class2.zip  
 │   ├───Class3.zip  
 │   └───...
+
 ```
 
-<table class="tg"><thead>
-  <tr>
-    <th class="tg-0lax">Method</th>
-    <th class="tg-0lax">cache</th>
-    <th class="tg-0lax">Speed(s)</th>
-  </tr></thead>
-<tbody>
-  <tr>
-    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">4.5</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">14.5</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">4.5</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">25.4</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax" rowspan="2">fsspec get()</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">14.5</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">24.5</td>
-  </tr>
-</tbody>
-</table>
+
+
+##### Benchmarking results:
 
 
 
-![Download ImageNetMini (/Users/a/Documents/2024summerintern/IntegratePelicanwithPytorch/doc/img/bar-graph.svg)](./img/bar-graph.svg)
+###### Table:
+
+<center>
+  <table class="tg"><thead>
+    <tr>
+      <th class="tg-0lax">Method</th>
+      <th class="tg-0lax">cache</th>
+      <th class="tg-0lax">Speed(s)</th>
+    </tr></thead>
+  <tbody>
+    <tr>
+      <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">4.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">14.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">4.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">25.4</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax" rowspan="2">fsspec get()</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">14.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">24.5</td>
+    </tr>
+  </tbody>
+  </table>
+</center>
+
+
+
+###### Bar chart:
+
+<div style="text-align: center;">
+    <img src="img/bar-graph.svg" alt="Description">
+</div>
+
 
 
 
