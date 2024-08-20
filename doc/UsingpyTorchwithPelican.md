@@ -185,7 +185,7 @@ ImageNetMini
 
 
 
-![bar-graph1](/Users/a/Documents/2024summerintern/newbranch/IntegratePelicanwithPytorch/doc/img/bar-graph1.svg)
+![bar-graph1](img/bar-graph1.svg)
 
 
 
