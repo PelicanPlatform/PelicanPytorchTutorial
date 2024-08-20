@@ -123,7 +123,9 @@ Downloading `ImageNetMini.zip` (1.5G):
 
 The ImageNetMini dataset contains 13,418 small image files across various folders. Benchmarking results indicate that using the Pelican CLI to download the entire folder recursively takes significantly longer compared to downloading a single ZIP file.
 
-Here's the hierarchy of ImageNetMini Dateset: (the names of the classes and images are simplifyed for better understanding, not the real file names.)
+Here's the hierarchy of ImageNetMini Dateset: 
+
+(The class names and images are simplified for clarity,  not the real file names.)
 
 ```shell
 ImageNetMini
