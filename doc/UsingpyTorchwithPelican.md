@@ -153,8 +153,13 @@ Downloading `ImageNetMini.zip`
   </tr>
 </tbody>
 </table>
-
 ![Download ImageNetMini (1.5G)](./img/bar-graph.svg)
+
+
+
+
+
+
 
 ```shell
 ImageNetMini
