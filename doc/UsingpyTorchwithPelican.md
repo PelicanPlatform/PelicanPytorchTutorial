@@ -119,19 +119,139 @@ fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
 
 ### Download speed benchmarking results:
 
-Downloading `ImageNetMini.zip`
+Downloading `ImageNetMini.zip` (1.5G):
 
-| METHOD                                                       | SPEED |
-| ------------------------------------------------------------ | ----- |
-| Pelican CLI download ImageNetMini.zip (cache cold)           | ~9s   |
-| Pelican CLI download ImageNetMini.zip (cache hot)            | ~2s   |
-| Pelican CLI download ImageNetMini folder recursively (cache cold) | ~55s  |
-| Pelican CLI download ImageNetMini folder recursively (cache hot) | ~9s   |
-| fsspec get() download ImageNetMini.zip                       | ~13s  |
+The ImageNetMini dataset contains 13,418 small image files across various folders. Benchmarking results indicate that using the Pelican CLI to download the entire folder recursively takes significantly longer compared to downloading a single ZIP file.
+
+Here's the hierarchy of ImageNetMini Dateset: (the names of the classes and images are simplifyed for better understanding, not the real file names.)
+
+```shell
+ImageNetMini
+├───nois.csv
+├───train
+│   ├───Class1 
+│   │   ├─── class1_image1.JPEG
+│   │   ├─── class1_image2.JPEG
+│   │   ├─── class1_image3.JPEG
+│   │   └─── ...
+│   ├───Class2  
+│   ├───Class3 
+│   └───...
+├───val
+│   ├───Class1  
+│   ├───Class2  
+│   ├───Class3  
+│   └───...
+```
 
 
 
-![image-20240807155822698](/Users/a/Library/Application Support/typora-user-images/image-20240807155822698.png)![image-20240807170130462](/Users/a/Library/Application Support/typora-user-images/image-20240807170130462.png)
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0lax">Method</th>
+    <th class="tg-0lax">cache</th>
+    <th class="tg-0lax">Speed(s)</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">4.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">14.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">11</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">236</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">fsspec get()</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">14.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">24.5</td>
+  </tr>
+</tbody>
+</table>
+
+
+
+![bar-graph1](/Users/a/Documents/2024summerintern/newbranch/IntegratePelicanwithPytorch/doc/img/bar-graph1.svg)
+
+
+
+To highlight the differences, another version of the ImageNetMini dataset was created by zipping the class folders, significantly reducing the total number of files to 23.
+
+Hierarchy of ImageNetMini Dataset After Zipping Class Folders:
+
+```shell
+ImageNetMini
+├───nois.csv
+├───train
+│   ├───Class1.zip
+│   ├───Class2.zip  
+│   ├───Class3 .zip
+│   └───...
+├───val
+│   ├───Class1.zip  
+│   ├───Class2.zip  
+│   ├───Class3.zip  
+│   └───...
+```
+
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0lax">Method</th>
+    <th class="tg-0lax">cache</th>
+    <th class="tg-0lax">Speed(s)</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">4.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">14.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">4.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">25.4</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">fsspec get()</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">14.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">24.5</td>
+  </tr>
+</tbody>
+</table>
+
+
+
+![Download ImageNetMini (/Users/a/Documents/2024summerintern/IntegratePelicanwithPytorch/doc/img/bar-graph.svg)](./img/bar-graph.svg)
+
+
+
+Then we can observe The download time for the zipped version of the folder is significantly reduced. Therefore, when deciding whether to download a folder recursively, it’s important to weigh the trade-offs between the number of files and the method used.
 
 #### 2.2.4: Local Cache data
 
