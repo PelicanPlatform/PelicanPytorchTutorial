@@ -117,17 +117,141 @@ fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
 
 Downloading `ImageNetMini.zip`
 
-| METHOD                                                       | SPEED |
-| ------------------------------------------------------------ | ----- |
-| Pelican CLI download ImageNetMini.zip (cache cold)           | ~9s   |
-| Pelican CLI download ImageNetMini.zip (cache hot)            | ~2s   |
-| Pelican CLI download ImageNetMini folder recursively (cache cold) | ~55s  |
-| Pelican CLI download ImageNetMini folder recursively (cache hot) | ~9s   |
-| fsspec get() download ImageNetMini.zip                       | ~13s  |
+ <style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0lax">Method</th>
+    <th class="tg-0lax">cache</th>
+    <th class="tg-0lax">Speed</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">4.5s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">14.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">11s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">236s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">fsspec get()</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">14.5s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">24.5s</td>
+  </tr>
+</tbody>
+</table>
+
+![Download ImageNetMini (1.5G)](./img/bar-graph.svg)
+
+```shell
+ImageNetMini
+├───nois.csv
+├───train
+│   ├───Class1 
+│   │   ├─── class1_image1.JPEG
+│   │   ├─── class1_image2.JPEG
+│   │   ├─── class1_image3.JPEG
+│   │   └─── ...
+│   ├───Class2  
+│   ├───Class3 
+│   └───...
+├───val
+│   ├───Class1  
+│   ├───Class2  
+│   ├───Class3  
+│   └───...
+```
 
 
 
-![image-20240807155822698](/Users/a/Library/Application Support/typora-user-images/image-20240807155822698.png)![image-20240807170130462](/Users/a/Library/Application Support/typora-user-images/image-20240807170130462.png)
+
+
+```shell
+ImageNetMini
+├───noisy_imagenette.csv
+├───train
+│   ├───n01440764  
+│       ├─── n01440764_7426.JPEG
+│       ├─── n01440764_12468.JPEG
+│       ├─── n01440764_2098.JPEG
+│       └─── ...
+│   ├───n02102040  
+│   ├───n02979186  
+│   └───...
+├───val
+│   ├───n01440764  
+│   ├───n02102040  
+│   ├───n02979186  
+│   └───...
+```
+
+
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0lax">Method</th>
+    <th class="tg-0lax">cache</th>
+    <th class="tg-0lax">Speed</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">4.5s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">14.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">4.8s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">25.4s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">fsspec get()</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">14.5s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">24.5s</td>
+  </tr>
+</tbody>
+</table>
 
 #### 2.2.4: Local Cache data
 
