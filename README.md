@@ -1,14 +1,14 @@
 This is a repository for project "Integrating Pelican with Pytorch". It's still under constuction. The goal:
 
 - Perform benchmark tests to validate model performance, ensuring effective integration of machine learning datasets through Pelican origins for improved data accessibility and processing.
-- Develop and test models from small prototypes to extensive systems within an HTCondor-managed workflow, significantly optimizing computational throughput.
+- Develop and test models from small prototypes to extensive systems within an HTCondor-managed workflow, optimizing computational throughput.
 - Create comprehensive tutorials and practical guides to facilitate the adoption of PyTorch and Pelican integration across the machine learning community.
 
-Pelican Website: https://pelicanplatform.org/
+Pelican Website: [https://pelicanplatform.org/](https://pelicanplatform.org/)
 
 Related tools:
 
-- HTCondor: https://htcondor.org/
+- HTCondor: [https://htcondor.org/](https://htcondor.org/)
 
 ## Datasets:
 
@@ -57,7 +57,7 @@ Related tools:
 
 For ImageNet standard data, the training files are under /train. 
 
-Under this path, there is 1000 directories named with corresponding classes of these images inside the directories. 
+Under this path, there are 1000 directories named with corresponding classes of these images inside the directories. 
 
 Val and Test follow the same rule after preparation. 
 
