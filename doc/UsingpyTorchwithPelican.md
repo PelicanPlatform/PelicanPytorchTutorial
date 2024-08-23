@@ -311,12 +311,6 @@ ImageNetMini
   </tr>
 </tbody>
 </table>
-![Download ImageNetMini (1.5G)](./img/bar-graph.svg)
-
-
-
-
-
 
 
 ```shell
@@ -339,27 +333,6 @@ ImageNetMini
 ```
 
 
-
-
-
-```shell
-ImageNetMini
-├───noisy_imagenette.csv
-├───train
-│   ├───n01440764  
-│       ├─── n01440764_7426.JPEG
-│       ├─── n01440764_12468.JPEG
-│       ├─── n01440764_2098.JPEG
-│       └─── ...
-│   ├───n02102040  
-│   ├───n02979186  
-│   └───...
-├───val
-│   ├───n01440764  
-│   ├───n02102040  
-│   ├───n02979186  
-│   └───...
-```
 
 <table class="tg"><thead>
   <tr>
