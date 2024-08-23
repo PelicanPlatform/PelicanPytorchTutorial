@@ -225,8 +225,6 @@ ImageNetMini
 
 ##### Benchmarking results:
 
-
-
 ###### Table:
 
 <center>
@@ -277,7 +275,138 @@ ImageNetMini
 </div>
 
 
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0lax">Method</th>
+    <th class="tg-0lax">cache</th>
+    <th class="tg-0lax">Speed</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">4.5s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">14.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">11s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">236s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">fsspec get()</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">14.5s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">24.5s</td>
+  </tr>
+</tbody>
+</table>
+![Download ImageNetMini (1.5G)](./img/bar-graph.svg)
 
+
+
+
+
+
+
+```shell
+ImageNetMini
+├───nois.csv
+├───train
+│   ├───Class1 
+│   │   ├─── class1_image1.JPEG
+│   │   ├─── class1_image2.JPEG
+│   │   ├─── class1_image3.JPEG
+│   │   └─── ...
+│   ├───Class2  
+│   ├───Class3 
+│   └───...
+├───val
+│   ├───Class1  
+│   ├───Class2  
+│   ├───Class3  
+│   └───...
+```
+
+
+
+
+
+```shell
+ImageNetMini
+├───noisy_imagenette.csv
+├───train
+│   ├───n01440764  
+│       ├─── n01440764_7426.JPEG
+│       ├─── n01440764_12468.JPEG
+│       ├─── n01440764_2098.JPEG
+│       └─── ...
+│   ├───n02102040  
+│   ├───n02979186  
+│   └───...
+├───val
+│   ├───n01440764  
+│   ├───n02102040  
+│   ├───n02979186  
+│   └───...
+```
+
+
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-0lax">Method</th>
+    <th class="tg-0lax">cache</th>
+    <th class="tg-0lax">Speed</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">4.5s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">14.5</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">4.8s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">25.4s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax" rowspan="2">fsspec get()</td>
+    <td class="tg-0lax">Hot</td>
+    <td class="tg-0lax">14.5s</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Cold</td>
+    <td class="tg-0lax">24.5s</td>
+  </tr>
+</tbody>
+</table>
 
 Then we can observe The download time for the zipped version of the folder is significantly reduced. Therefore, when deciding whether to download a folder recursively, it’s important to weigh the trade-offs between the number of files and the method used.
 
