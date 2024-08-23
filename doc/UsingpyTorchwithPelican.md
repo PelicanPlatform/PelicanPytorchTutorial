@@ -1,10 +1,19 @@
+
+
 # Using PyTorch with Pelican
 
 This tutorial guides you through setting up and using PyTorch with Pelican for efficient data management and processing.
 
+There will be quite a lot of Pelican terms used. A reference for these core terms cane be found [here](https://docs.pelicanplatform.org/core-concepts)
+
 ## 1. Install Pelican and PyTorch
 
 Ensure that both Pelican and PyTorch are installed on your system.
+
+
+For Pelican installation instructions, go [here](https://docs.pelicanplatform.org/install)
+
+For PyTorch installation intstructions, go [here](https://pytorch.org/get-started/locally/).
 
 ### Verification
 
@@ -32,13 +41,13 @@ For pytorch installation, see [here](https://pytorch.org/get-started/locally/).
 
 
 
-## 2. Access Pelican's data
+## 2. Accessing Pelican's data
 
 ### 2.1: Using command line to download data
 
-Before downloading your data, I believe you have known the location of it. In this case, you should have known your target origin's federation, name space, and path to target file. 
+Before downloading your data, you should have know your target's federation and namespace prefix. 
 
-Then, use `object get` command to download your data to local destination. Below is the format to follow. For more details, read the [Pelican Client Guide]((https://docs.pelicanplatform.org/getting-data-with-pelican/client)).
+Use the `object get` command to download your data to a local destination. Below is the format to follow. For more details, read the [Pelican Client Guide]((https://docs.pelicanplatform.org/getting-data-with-pelican/client)).
 
 ```shell
 pelican object get pelican://<federation-url></namespace-prefix></path/to/file> <local/path/to/file>
@@ -65,9 +74,9 @@ If the target object is a directory, you can download the whole directory with a
 
 
 
-### 2.2: Using pelicanfs(fsspec) to Access/download data
+### 2.2: Using pelicanfs(fsspec) to access/download data
 
-Using the command line is easy, buy you may want to do some more complicated operation, or just want to integrate it to your python code to make them streamlined and consist. In this way, we have `pelicanfs` library, which implement the [`fsspec`](https://filesystem-spec.readthedocs.io/en/latest/index.html). `fsspec` exists to provide a familiar API that will work the same whatever the storage backend. This means, if you have some data on google cloud or s3, you can access them all the same! (For more detail information,  please read [fsspec's document](https://filesystem-spec.readthedocs.io/en/latest/index.html))
+Using the command line is simple, but you may want to do some more complicated operations or want to integrate python code which already uses and fsspec for ease of use and consistency. To accomplish this, use the `pelicanfs` API, which is an implementation of [`fsspec`](https://filesystem-spec.readthedocs.io/en/latest/index.html). `fsspec` exists to provide a familiar API that will work the same whatever the storage backend. (For more detailed information,  please read [fsspec's document](https://filesystem-spec.readthedocs.io/en/latest/index.html))
 
 To install pelicanfs, run:
 
@@ -75,9 +84,9 @@ To install pelicanfs, run:
 pip install pelicanfs
 ```
 
-#### 2.2.1: Use fsspec with protocal
+#### 2.2.1: Use fsspec with the osdf protocol
 
-In this way, we initialize an OSDF File System, then we can access our file in it. 
+If your data is on the osdf. You can also use the osdf protocol which is a specific version of the pelican protocol with the osdf's federation discovery url preset. 
 
 ```python
 import fsspec
@@ -87,9 +96,9 @@ valfile_path = "/chtc/PUBLIC/hzhao292/ImageNetMini/val"
 fs.ls(valfile_path)
 ```
 
-#### 2.2.2: Using Pelican File System
+#### 2.2.2: Using the Pelican File System
 
-If you are using the pelican file system, you need to pass the discovery URL of the Federation because it doesn't know which federation are you come from, in this case, We are passing OSDF's discovery URL.
+If you are using the pelican file system, you need to pass the discovery URL of the federation you are using. In this case, We are passing OSDF's discovery URL.
 
 ```python
 from pelicanfs.core import PelicanFileSystem
@@ -99,67 +108,26 @@ valfile_path = "/chtc/PUBLIC/hzhao292/ImageNetMini/val"
 fs.ls(valfile_path)
 ```
 
-In a nutshell, you should either pass the federation protocal to fsspec's `filesystem`, or discovery URL of your federation to `PelicanFileSystem` in pelicanfs. 
+#### 2.2.3: Downloading data
 
-#### 2.2.3: Download data
+To download your files to your local file system, use `get()`.
 
-To download file to your local file system, use `get()`.
-
-Below is an example to download a zip file to current directory. 
+Below is an example command downloading using a zip file to the current directory. 
 
 ```python
 fs.get("/chtc/PUBLIC/hzhao292/ImageNetMini.zip","./")
 ```
 
 
+### Download speed benchmarking results:
 
-### Download speed benchmark results:
+#### Downloading `ImageNetMini` (1.5G):
 
-Downloading `ImageNetMini.zip`
+The ImageNetMini dataset contains 13,418 small image files across various folders. Benchmarking results indicate that using the Pelican CLI to download the entire folder recursively takes significantly longer compared to downloading a single ZIP file.
 
-<table class="tg"><thead>
-  <tr>
-    <th class="tg-0lax">Method</th>
-    <th class="tg-0lax">cache</th>
-    <th class="tg-0lax">Speed</th>
-  </tr></thead>
-<tbody>
-  <tr>
-    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">4.5s</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">14.5</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">11s</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">236s</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax" rowspan="2">fsspec get()</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">14.5s</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">24.5s</td>
-  </tr>
-</tbody>
-</table>
-![Download ImageNetMini (1.5G)](./img/bar-graph.svg)
+##### Hierarchy of ImageNetMini Dateset: 
 
-
-
-
-
-
+(The class names and images are simplified for clarity,  not the real file names.)
 
 ```shell
 ImageNetMini
@@ -180,79 +148,137 @@ ImageNetMini
 │   └───...
 ```
 
+##### Benchmarking results:
+
+###### Table:
+
+<center>
+  <table class="tg"><thead>
+    <tr>
+      <th class="tg-0lax">Method</th>
+      <th class="tg-0lax">cache</th>
+      <th class="tg-0lax">Speed(s)</th>
+    </tr></thead>
+  <tbody>
+    <tr>
+      <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">4.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">14.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">11</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">236</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax" rowspan="2">fsspec get()</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">14.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">24.5</td>
+    </tr>
+  </tbody>
+  </table>
+</center>
+
+###### Bar chart:
+
+<div style="text-align: center;">
+    <img src="img/bar-graph1.svg" alt="Description">
+</div>
 
 
 
+#### Downloading `ImageNetMini` with Class Folders Zipped:
+
+To better illustrate the differences, we created a new version of the ImageNetMini dataset by zipping the class folders without compression. This approach significantly reduced the total number of files to 23 while still preserving the overall size.
+
+##### Hierarchy of ImageNetMini Dataset After Zipping Class Folders:
 
 ```shell
 ImageNetMini
-├───noisy_imagenette.csv
+├───nois.csv
 ├───train
-│   ├───n01440764  
-│       ├─── n01440764_7426.JPEG
-│       ├─── n01440764_12468.JPEG
-│       ├─── n01440764_2098.JPEG
-│       └─── ...
-│   ├───n02102040  
-│   ├───n02979186  
+│   ├───Class1.zip
+│   ├───Class2.zip  
+│   ├───Class3 .zip
 │   └───...
 ├───val
-│   ├───n01440764  
-│   ├───n02102040  
-│   ├───n02979186  
+│   ├───Class1.zip  
+│   ├───Class2.zip  
+│   ├───Class3.zip  
 │   └───...
+
 ```
 
 
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-0lax{text-align:left;vertical-align:top}
-</style>
-<table class="tg"><thead>
-  <tr>
-    <th class="tg-0lax">Method</th>
-    <th class="tg-0lax">cache</th>
-    <th class="tg-0lax">Speed</th>
-  </tr></thead>
-<tbody>
-  <tr>
-    <td class="tg-0lax" rowspan="2">Pelican CLI</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">4.5s</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">14.5</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">4.8s</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">25.4s</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax" rowspan="2">fsspec get()</td>
-    <td class="tg-0lax">Hot</td>
-    <td class="tg-0lax">14.5s</td>
-  </tr>
-  <tr>
-    <td class="tg-0lax">Cold</td>
-    <td class="tg-0lax">24.5s</td>
-  </tr>
-</tbody>
-</table>
+##### Benchmarking results:
+
+###### Table:
+
+<center>
+  <table class="tg"><thead>
+    <tr>
+      <th class="tg-0lax">Method</th>
+      <th class="tg-0lax">cache</th>
+      <th class="tg-0lax">Speed(s)</th>
+    </tr></thead>
+  <tbody>
+    <tr>
+      <td class="tg-0lax" rowspan="2">Pelican CLI</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">4.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">14.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax" rowspan="2">Pelican CLI recursively</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">4.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">25.4</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax" rowspan="2">fsspec get()</td>
+      <td class="tg-0lax">Hot</td>
+      <td class="tg-0lax">14.5</td>
+    </tr>
+    <tr>
+      <td class="tg-0lax">Cold</td>
+      <td class="tg-0lax">24.5</td>
+    </tr>
+  </tbody>
+  </table>
+</center>
+
+
+
+###### Bar chart:
+
+<div style="text-align: center;">
+    <img src="img/bar-graph.svg" alt="Description">
+</div>
+
+Then we can observe The download time for the zipped version of the folder is significantly reduced. Therefore, when deciding whether to download a folder recursively, it’s important to weigh the trade-offs between the number of files and the method used.
 
 #### 2.2.4: Local Cache data
 
-fsspec allows you to access data on remote file systems, that is its purpose. However, such access can often be rather slow compared to local storage, so as well as buffering (see above), the option exists to copy files locally when you first access them, and thereafter to use the local data. This local cache of data might be temporary (i.e., attached to the process and discarded when the process ends) or at some specific location in your local storage.
+fsspec allows you to access data on remote file systems. However, such access can often be rather slow compared to local storage. As well as buffering (see above), the option exists to copy files locally when you first access them and thereafter to use the local data. This local cache of data might be temporary (i.e., attached to the process and discarded when the process ends) or at some specific location in your local storage.
 
 The following example creates a file-based cache for osdf federation. 
 
@@ -262,9 +288,9 @@ with fs.open("pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt") as f:
     print(f.read(1024))
 ```
 
-Each time you open a remote file on pelican origin using this `fs`, it will first copy it to a local temporary directory, and then all further access will use the local file. Since we specify a particular local location, the files will persist and can be reused from future sessions, although you can also set policies to have cached files expire after some time, or to check the remote file system on each open, to see if the target file has changed since it was copied.
+Each time you open a remote file on pelican origin using this `fs`, it will first copy it to a local temporary directory, and then all further accesses will use the local file. Since we specify a particular local location, the files will persist and can be reused from future sessions. Slthough you can also set policies to have cached files expire after some time or to check the remote file system on each open to see if the target file has changed since it was copied.
 
-With the top-level functions open, open_local and open_files, you can use the same set of kwargs as the example above, or you can chain the URL - the following would be the equivalent:
+With the top-level functions 'open', 'open_local' and 'open_files', you can use the same set of kwargs as the example above or you can chain the URL - the following would be the equivalent:
 
 ```python
 with fsspec.open("filecache::pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt", filecache={'cache_storage':'tmp/files'}) as f:
@@ -273,7 +299,7 @@ with fsspec.open("filecache::pelican://osg-htc.org/chtc/PUBLIC/hzhao292/test.txt
 
 > Local caching can be **slow** if it involves frequent random access to **many small files**, as each access might involve metadata operations and checks for cache validity. This can introduce significant overhead when dealing with numerous files.
 
-## 3. Loading data using pyTorch
+## 3. Loading data using PyTorch
 
 PyTorch provides two data primitives: `torch.utils.data.DataLoader` and `torch.utils.data.Dataset` that allow you to use pre-loaded datasets as well as your own data. `Dataset` stores the samples and their corresponding labels, and `DataLoader` wraps an iterable around the `Dataset` to enable easy access to the samples.
 

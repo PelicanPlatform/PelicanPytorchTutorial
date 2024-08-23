@@ -1,6 +1,6 @@
 This is a repository for project "Integrating Pelican with Pytorch". 
 
-Pelican Website: https://pelicanplatform.org/
+Pelican Website: [https://pelicanplatform.org/](https://pelicanplatform.org/)
 
 HTCondor: https://htcondor.org/
 
@@ -36,7 +36,7 @@ In Others:
 
   Shows the using of RemoteImageFolder.
 
-## Dataset using:
+## Datasets:
 
 [Fashion-mnist](https://www.kaggle.com/datasets/zalando-research/fashionmnist)
 
@@ -44,7 +44,7 @@ In Others:
 
 [ImageNet Mini](https://github.com/fastai/imagenette)
 
-## Current data under `chtc/PUBLIC/hzhao292` name space
+## Current data under `chtc/PUBLIC/hzhao292` namespace
 
 
 
@@ -82,10 +82,11 @@ In Others:
 | 1.5G | ImageNetMini.zip |
 | 1.5G | ImageNetMini     |
 
+
 For ImageNet standard data, train file is under `/train.` 
 
-Under this path, there is 1000 directories named with corresponding classes of these images inside the directories. 
+Under this path, there are 1000 directories named with corresponding classes of these images inside the directories. 
 
 Val and Test follow the same rule.
 
-ImageNetMini is a subset for conveniently testing.  It only have 10 classes. About 1000 images in each class.
+ImageNetMini is a subset for convenient testing.  It only have 10 classes. About 1000 images in each class.
